@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-	res.send("hello boiiiiiiiiiii");
+	res.send("songs api");
 });
 
 app.use("/v1/songs", songsRoutes);
