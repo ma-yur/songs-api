@@ -9,6 +9,6 @@ router.get("/:id", getSongById);
 
 router.post("/", addSong);
 
-router.post("/:id", removeSong);
+router.delete("/:id", removeSong);
 
 module.exports = router;

@@ -26,8 +26,19 @@ const addSong = (req, res) => {
 	);
 };
 
+const removeSong = (req, res) => {
+	const id = req.params.id;
+	console.log(id);
+	pool.query(`DELETE FROM songs WHERE id=${id}`, (err, result) => {
+		if (err) throw err;
+		if (!result.rowCount) res.send("no song found with given id");
+		res.status(201).send("song removed successfully");
+	});
+};
+
 module.exports = {
 	getSongs,
 	getSongById,
 	addSong,
+	removeSong,
 };
