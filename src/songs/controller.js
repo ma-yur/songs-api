@@ -31,8 +31,8 @@ const removeSong = (req, res) => {
 	console.log(id);
 	pool.query(`DELETE FROM songs WHERE id=${id}`, (err, result) => {
 		if (err) throw err;
-		if (!result.rowCount) res.send("no song found with given id");
-		res.status(201).send("song removed successfully");
+		if (!result.rowCount) res.status(204).send("no song found with given id");
+		res.status(200).send("song removed successfully");
 	});
 };
 
