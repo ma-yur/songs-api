@@ -1,9 +1,9 @@
 const { Router } = require("express");
 
+const { getSongs } = require("./controller");
+
 const router = Router();
 
-router.get("/", (req, res) => {
-	res.send("holooo from routes");
-});
+router.get("/", getSongs);
 
 module.exports = router;
