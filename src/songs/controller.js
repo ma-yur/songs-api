@@ -25,14 +25,25 @@ const addSong = (req, res) => {
 		}
 	);
 };
+const updateSongById = (req, res) => {
+	const id = req.params.id;
+	const { song, artist, year } = req.body;
+	pool.query(
+		`update songs set song='${song}',artist='${artist}',year=${year} where id=${id};`,
+		(err, result) => {
+			if (err) throw err;
+			if (!result.rowCount) res.status(200).send("no song found with given id");
+			res.status(201).send(result);
+		}
+	);
+};
 
 const removeSong = (req, res) => {
 	const id = req.params.id;
-	console.log(id);
 	pool.query(`DELETE FROM songs WHERE id=${id}`, (err, result) => {
 		if (err) throw err;
-		if (!result.rowCount) res.status(204).send("no song found with given id");
-		res.status(200).send("song removed successfully");
+		if (!result.rowCount) res.status(200).send("no song found with given id");
+		res.status(200).send(result);
 	});
 };
 
@@ -41,4 +52,5 @@ module.exports = {
 	getSongById,
 	addSong,
 	removeSong,
+	updateSongById,
 };
