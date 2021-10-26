@@ -1,6 +1,6 @@
 const { Router } = require("express");
 
-const { getSongs, getSongById, addSong } = require("./controller");
+const { getSongs, getSongById, addSong, removeSong } = require("./controller");
 
 const router = Router();
 
@@ -8,5 +8,7 @@ router.get("/", getSongs);
 router.get("/:id", getSongById);
 
 router.post("/", addSong);
+
+router.post("/:id", removeSong);
 
 module.exports = router;

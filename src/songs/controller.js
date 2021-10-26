@@ -21,7 +21,7 @@ const addSong = (req, res) => {
 		`INSERT INTO songs(song,artist,year) VALUES('${song}','${artist}',${year})`,
 		(err, result) => {
 			if (err) throw err;
-			res.status(202).send("new song added");
+			res.status(201).send("new song added successfully");
 		}
 	);
 };
