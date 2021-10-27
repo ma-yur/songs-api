@@ -22,7 +22,15 @@ app.get("/", (req, res) => {
 const db = require("./app/models");
 db.sequelize.sync();
 
+// const run = async () => {
+// 	const tag1 = await PlaylistsController.create({
+// 		name: "Tag#1",
+// 	});
+// };
+// run();
 require("./app/routes/songs.routes")(app);
+require("./app/routes/playlists.routes")(app);
+require("./app/routes/update.routes")(app);
 
 const port = 3001;
 app.listen(port, () => console.log(`app listening on port:${port} `));

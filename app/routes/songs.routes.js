@@ -13,7 +13,5 @@ module.exports = (app) => {
 
 	router.delete("/:id", songs.delete);
 
-
-
 	app.use("/v1/songs", router);
 };

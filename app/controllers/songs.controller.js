@@ -1,5 +1,7 @@
 const db = require("../models");
 const Songs = db.songs;
+const Playlists = db.playlists;
+
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
@@ -111,5 +113,56 @@ exports.delete = (req, res) => {
 			res.status(500).send({
 				message: "Could not delete Song with id=" + id,
 			});
+		});
+};
+exports.addSong = (req, res) => {
+	const playlistId = req.params.playlistId;
+	const songId = req.params.songId;
+	console.log(playlistId, songId);
+
+	return Playlists.findByPk(playlistId)
+		.then((playlist) => {
+			if (!playlist) {
+				console.log("playlist not found!");
+				return null;
+			}
+			return Songs.findByPk(songId).then((song) => {
+				if (!song) {
+					console.log("song not found!");
+					return null;
+				}
+
+				playlist.addSong(song);
+				res.send(playlist);
+			});
+		})
+		.catch((err) => {
+			console.log(">> Error while adding Tutorial to Tag: ", err);
+		});
+};
+
+exports.removeSong = (req, res) => {
+	const playlistId = req.params.playlistId;
+	const songId = req.params.songId;
+	console.log(playlistId, songId);
+
+	return Playlists.findByPk(playlistId)
+		.then((playlist) => {
+			if (!playlist) {
+				console.log("playlist not found!");
+				return null;
+			}
+			return Songs.findByPk(songId).then((song) => {
+				if (!song) {
+					console.log("song not found!");
+					return null;
+				}
+
+				playlist.removeSong(song);
+				res.send(playlist);
+			});
+		})
+		.catch((err) => {
+			console.log(">> Error while adding Tutorial to Tag: ", err);
 		});
 };
