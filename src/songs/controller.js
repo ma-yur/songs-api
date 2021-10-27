@@ -1,4 +1,4 @@
-const pool = require("../../bd");
+const pool = require("../../app/config/db.config");
 
 const getSongs = (req, res) => {
 	pool.query("SELECT * FROM songs", (err, result) => {

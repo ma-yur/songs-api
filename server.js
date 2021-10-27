@@ -1,16 +1,29 @@
 const express = require("express");
-const songsRoutes = require("./src/songs/routes");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
+// const songsRoutes = require("./src/songs/routes");
 const app = express();
-const port = 3000;
+
+var corsOptions = {
+	origin: "http://localhost:3001",
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-	res.send("songs api");
+	res.json({ message: "Welcome to Songs api" });
 });
 
-app.use("/v1/songs", songsRoutes);
+const db = require("./app/models");
+db.sequelize.sync();
 
+
+require("./app/routes/songs.routes")(app);
+
+const port = 3001;
 app.listen(port, () => console.log(`app listening on port:${port} `));
