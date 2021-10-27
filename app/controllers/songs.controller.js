@@ -4,8 +4,6 @@ const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
-	// Validate request
-	console.log(req.body);
 	if (!req.body.song) {
 		res.status(400).send({
 			message: "Content can not be empty!",
@@ -13,16 +11,12 @@ exports.create = (req, res) => {
 		return;
 	}
 
-	// Create a Tutorial
 	const song = {
 		song: req.body.song,
 		artist: req.body.artist,
 		year: req.body.year,
 	};
 
-	// Save Tutorial in the database
-	console.log(song);
-  
 	Songs.create(song)
 		.then((data) => {
 			res.send(data);
@@ -35,20 +29,87 @@ exports.create = (req, res) => {
 		});
 };
 
-// Retrieve all Tutorials from the database.
-exports.findAll = (req, res) => {};
+// Retrieve all songs from the database.
+exports.findAll = (req, res) => {
+	const song = req.query.song;
+	var condition = song ? { song: { [Op.iLike]: `%${song}%` } } : null;
 
-// Find a single Tutorial with an id
-exports.findOne = (req, res) => {};
+	Songs.findAll({ where: condition })
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message:
+					err.message || "Some error occurred while retrieving tutorials.",
+			});
+		});
+};
 
-// Update a Tutorial by the id in the request
-exports.update = (req, res) => {};
+exports.findOne = (req, res) => {
+	const id = req.params.id;
 
-// Delete a Tutorial with the specified id in the request
-exports.delete = (req, res) => {};
+	Songs.findByPk(id)
+		.then((data) => {
+			if (data) {
+				res.send(data);
+			} else {
+				res.status(404).send({
+					message: `Cannot find song with id=${id}.`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: "Error retrieving Tutorial with id=" + id,
+			});
+		});
+};
 
-// Delete all Tutorials from the database.
-exports.deleteAll = (req, res) => {};
+exports.update = (req, res) => {
+	const id = req.params.id;
 
-// Find all published Tutorials
-exports.findAllPublished = (req, res) => {};
+	Songs.update(req.body, {
+		where: { id: id },
+	})
+		.then((num) => {
+			if (num == 1) {
+				res.send({
+					message: "song was updated successfully.",
+				});
+			} else {
+				res.send({
+					message: `Cannot update song with id=${id}. Maybe Tutorial was not found or req.body is empty!`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: "Error updating Tutorial with id=" + id,
+			});
+		});
+};
+
+exports.delete = (req, res) => {
+	const id = req.params.id;
+
+	Songs.destroy({
+		where: { id: id },
+	})
+		.then((num) => {
+			if (num == 1) {
+				res.send({
+					message: "Song was deleted successfully!",
+				});
+			} else {
+				res.send({
+					message: `Cannot delete Song with id=${id}. Maybe Songs was not found!`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: "Could not delete Song with id=" + id,
+			});
+		});
+};

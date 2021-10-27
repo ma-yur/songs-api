@@ -22,7 +22,6 @@ app.get("/", (req, res) => {
 const db = require("./app/models");
 db.sequelize.sync();
 
-
 require("./app/routes/songs.routes")(app);
 
 const port = 3001;
