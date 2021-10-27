@@ -118,7 +118,6 @@ exports.delete = (req, res) => {
 exports.addSong = (req, res) => {
 	const playlistId = req.params.playlistId;
 	const songId = req.params.songId;
-	console.log(playlistId, songId);
 
 	return Playlists.findByPk(playlistId)
 		.then((playlist) => {
@@ -144,7 +143,6 @@ exports.addSong = (req, res) => {
 exports.removeSong = (req, res) => {
 	const playlistId = req.params.playlistId;
 	const songId = req.params.songId;
-	console.log(playlistId, songId);
 
 	return Playlists.findByPk(playlistId)
 		.then((playlist) => {

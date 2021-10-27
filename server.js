@@ -32,5 +32,10 @@ require("./app/routes/songs.routes")(app);
 require("./app/routes/playlists.routes")(app);
 require("./app/routes/update.routes")(app);
 
-const port = 3001;
-app.listen(port, () => console.log(`app listening on port:${port} `));
+// const port = 3001;
+// app.listen(port, () => console.log(`app listening on port:${port} `));
+let port = process.env.PORT;
+if (port == null || port == "") {
+	port = 8000;
+}
+app.listen(port);
