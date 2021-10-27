@@ -20,7 +20,7 @@ exports.create = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message:
-					err.message || "Some error occurred while creating the Tutorial.",
+					err.message || "Some error occurred while creating the playlist.",
 			});
 		});
 };
@@ -42,19 +42,18 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
 	const id = req.params.id;
 
-	Playlists.findByPk(id,{
-    include: [
-      {
-        model: Songs,
-        as: "songs",
-        attributes: ["id", "song", "artist","year"],
-        through: {
-          attributes: [],
-        }
-      },
-    ],
-
-  })
+	Playlists.findByPk(id, {
+		include: [
+			{
+				model: Songs,
+				as: "songs",
+				attributes: ["id", "song", "artist", "year"],
+				through: {
+					attributes: [],
+				},
+			},
+		],
+	})
 		.then((data) => {
 			if (data) {
 				res.send(data);
@@ -67,6 +66,30 @@ exports.findOne = (req, res) => {
 		.catch((err) => {
 			res.status(500).send({
 				message: "Error retrieving Tutorial with id=" + id,
+			});
+		});
+};
+
+exports.delete = (req, res) => {
+	const id = req.params.id;
+
+	Playlists.destroy({
+		where: { id: id },
+	})
+		.then((num) => {
+			if (num == 1) {
+				res.send({
+					message: "Song was deleted successfully!",
+				});
+			} else {
+				res.send({
+					message: `Cannot delete playlist with id=${id}. playlits Song was not found!`,
+				});
+			}
+		})
+		.catch((err) => {
+			res.status(500).send({
+				message: "Could not delete playlist with id=" + id,
 			});
 		});
 };

@@ -25,8 +25,7 @@ exports.create = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while creating the Tutorial.",
+				message: err.message || "Some error occurred while creating the song.",
 			});
 		});
 };
@@ -42,8 +41,7 @@ exports.findAll = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message:
-					err.message || "Some error occurred while retrieving tutorials.",
+				message: err.message || "Some error occurred while retrieving song.",
 			});
 		});
 };
@@ -63,7 +61,7 @@ exports.findOne = (req, res) => {
 		})
 		.catch((err) => {
 			res.status(500).send({
-				message: "Error retrieving Tutorial with id=" + id,
+				message: "Error retrieving song with id=" + id,
 			});
 		});
 };
@@ -81,7 +79,7 @@ exports.update = (req, res) => {
 				});
 			} else {
 				res.send({
-					message: `Cannot update song with id=${id}. Maybe Tutorial was not found or req.body is empty!`,
+					message: `Cannot update song with id=${id}`,
 				});
 			}
 		})
@@ -122,21 +120,25 @@ exports.addSong = (req, res) => {
 	return Playlists.findByPk(playlistId)
 		.then((playlist) => {
 			if (!playlist) {
-				console.log("playlist not found!");
-				return null;
+				res.send({
+					message: `Cannot add song invalid playlist`,
+				});
 			}
 			return Songs.findByPk(songId).then((song) => {
 				if (!song) {
-					console.log("song not found!");
-					return null;
+					res.send({
+						message: `Cannot remove song,invalid song id`,
+					});
 				}
 
 				playlist.addSong(song);
-				res.send(playlist);
+				res.send(song);
 			});
 		})
 		.catch((err) => {
-			console.log(">> Error while adding Tutorial to Tag: ", err);
+			res.status(500).send({
+				message: "Could not add song ",
+			});
 		});
 };
 
@@ -147,20 +149,24 @@ exports.removeSong = (req, res) => {
 	return Playlists.findByPk(playlistId)
 		.then((playlist) => {
 			if (!playlist) {
-				console.log("playlist not found!");
-				return null;
+				res.send({
+					message: `Cannot remove song,invalid playlist id`,
+				});
 			}
 			return Songs.findByPk(songId).then((song) => {
 				if (!song) {
-					console.log("song not found!");
-					return null;
+					res.send({
+						message: `Cannot remove song,invalid song id`,
+					});
 				}
 
 				playlist.removeSong(song);
-				res.send(playlist);
+				res.send(song);
 			});
 		})
 		.catch((err) => {
-			console.log(">> Error while adding Tutorial to Tag: ", err);
+			res.status(500).send({
+				message: "Could not remove song ",
+			});
 		});
 };

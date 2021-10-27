@@ -11,7 +11,7 @@ module.exports = (app) => {
 
 	// router.put("/:playlist_id/:song_id", playlists.update);
 
-	// router.delete("/:id", playlists.delete);
+	router.delete("/:id", playlists.delete);
 
 	app.use("/v1/playlists", router);
 };
